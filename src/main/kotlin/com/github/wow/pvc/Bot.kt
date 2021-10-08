@@ -2,7 +2,12 @@ package com.github.wow.pvc
 
 import com.github.wow.pvc.command.Command
 import com.github.wow.pvc.command.PvcSetCommand
-import com.github.wow.pvc.model.*
+import com.github.wow.pvc.model.CreationChannel
+import com.github.wow.pvc.model.Guild
+import com.github.wow.pvc.model.IGuild
+import com.github.wow.pvc.model.IVoiceChannel
+import com.github.wow.pvc.model.Models
+import com.github.wow.pvc.model.VoiceChannel
 import com.github.wow.pvc.util.BotConfig
 import com.github.wow.pvc.util.Constants
 import io.requery.kotlin.eq
