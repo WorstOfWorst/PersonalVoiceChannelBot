@@ -1,6 +1,7 @@
 plugins {
     kotlin("jvm") version "1.5.31"
     kotlin("kapt") version "1.5.31"
+    id("com.github.johnrengelman.shadow") version "7.0.0"
 }
 
 group = "com.github.wow.pvc"
@@ -27,4 +28,13 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
+}
+
+tasks {
+    shadowJar {
+        archiveClassifier.set("")
+        manifest {
+            attributes(mapOf("Main-Class" to "com.github.wow.pvc.BootstrapKt"))
+        }
+    }
 }
