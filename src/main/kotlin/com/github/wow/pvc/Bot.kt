@@ -141,7 +141,7 @@ class Bot(private val config: BotConfig) {
     fun onCommand(commandName: String, message: Message, args: List<String>) {
         commandMap[commandName]?.let { command ->
             if (command.testPermission(message) && !command.execute(message, args)) {
-                message.reply("Usage: ${command.usage}").queue {
+                message.reply("사용법: ${command.usage}").queue {
                     it.delete().queueAfter(5, TimeUnit.SECONDS)
                     message.delete().queueAfter(5, TimeUnit.SECONDS)
                 }

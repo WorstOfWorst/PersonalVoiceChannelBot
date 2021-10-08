@@ -15,6 +15,6 @@ object Constants {
         GatewayIntent.GUILD_EMOJIS,
         GatewayIntent.GUILD_MESSAGES,
     )
-    val activity = Activity.playing("!!방생성채널추가, !!방생성채널제거, !!방생성채널목록")
+    val activity = Activity.playing("!!방생성채널설정")
     val commandPrefix = "!!"
 }

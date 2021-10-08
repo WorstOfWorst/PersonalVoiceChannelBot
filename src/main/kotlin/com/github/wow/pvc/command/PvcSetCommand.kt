@@ -8,7 +8,7 @@ import net.dv8tion.jda.api.entities.Message
 class PvcSetCommand(bot: Bot) : BaseCommand(
     "pvcset",
     "개인통화방 생성 채널을 설정합니다.",
-    "${Constants.commandPrefix}pvcset <Channel ID>",
+    "${Constants.commandPrefix}방생성채널설정 <Channel ID>",
     listOf("방생성채널설정"),
     bot
 ) {

@@ -32,7 +32,11 @@ abstract class BaseCommand(
                 Permission.VOICE_MOVE_OTHERS
             )
         ) {
-            replyAndDelete(message, "이 명령어를 실행하기 위해서 `채널 보기`, `채널 관리`, `메시지 관리`, `멤버 이동` 권한이 필요해요.")
+            replyAndDelete(message, "이 명령어를 실행하기 위해서 봇에 `채널 보기`, `채널 관리`, `메시지 관리`, `멤버 이동` 권한이 필요해요.")
+            return false
+        }
+        if (message.member?.hasPermission(Permission.MANAGE_CHANNEL) == false) {
+            replyAndDelete(message, "이 명령어를 실행할 권한이 부족해요. (부족한 권한: `채널 관리`)")
             return false
         }
         return true
