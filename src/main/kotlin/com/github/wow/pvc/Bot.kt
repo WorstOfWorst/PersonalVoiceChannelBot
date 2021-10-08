@@ -15,8 +15,6 @@ import io.requery.sql.KotlinConfiguration
 import io.requery.sql.KotlinEntityDataStore
 import io.requery.sql.SchemaModifier
 import io.requery.sql.TableCreationMode
-import java.util.concurrent.TimeUnit
-import javax.sql.DataSource
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.Permission
@@ -26,6 +24,8 @@ import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.hooks.EventListener
 import net.dv8tion.jda.api.utils.cache.CacheFlag
 import org.postgresql.ds.PGSimpleDataSource
+import java.util.concurrent.TimeUnit
+import javax.sql.DataSource
 import net.dv8tion.jda.api.entities.Guild as JDAGuild
 import net.dv8tion.jda.api.entities.VoiceChannel as JDAVoiceChannel
 
@@ -87,25 +87,27 @@ class Bot(private val config: BotConfig) {
     }
 
     fun removeCreationChannel(guild: JDAGuild, jdaVoiceChannel: JDAVoiceChannel) {
-        val guildData = getGuildDataOrSave(guild)
-
-        val channel = guildData.creationChannels.find { it.id == jdaVoiceChannel.idLong }
-
-        if (channel != null) {
-            guildData.creationChannels.remove(channel)
-            guildDataStore.update(guildData)
-        }
         deleteCreatedChannels(jdaVoiceChannel)
     }
 
     fun createChannels(guild: JDAGuild, owner: Member, category: Category?) {
         val channel = guild.createVoiceChannel("${owner.effectiveName}의 통화방", category)
             .addMemberPermissionOverride(owner.idLong, listOf(Permission.MANAGE_CHANNEL), listOf())
+            .addMemberPermissionOverride(
+                guild.selfMember.idLong,
+                listOf(Permission.VIEW_CHANNEL, Permission.MANAGE_CHANNEL),
+                listOf()
+            )
             .setUserlimit(99)
 
         channel.queue { voiceChannel ->
             guild.createTextChannel("${owner.effectiveName}의 채팅방", category)
                 .addMemberPermissionOverride(owner.idLong, listOf(Permission.MANAGE_CHANNEL), listOf())
+                .addMemberPermissionOverride(
+                    guild.selfMember.idLong,
+                    listOf(Permission.VIEW_CHANNEL, Permission.MANAGE_CHANNEL),
+                    listOf()
+                )
                 .setNSFW(false)
                 .addPermissionOverride(guild.publicRole, listOf(), listOf(Permission.VIEW_CHANNEL))
                 .addMemberPermissionOverride(owner.idLong, listOf(Permission.VIEW_CHANNEL), listOf())
@@ -134,9 +136,18 @@ class Bot(private val config: BotConfig) {
         val guildData = getGuildDataOrSave(channel.guild)
         val voiceChannel = guildData.voiceChannels.find { it.id == channel.idLong } ?: return
 
-        channel.delete().reason("빈 개인 통화방").queue()
-        val textChannel = channel.guild.getTextChannelById(voiceChannel.textChannel) ?: return
-        textChannel.delete().reason("빈 개인 채팅방").queue()
+        try {
+            if (channel.guild.getVoiceChannelById(channel.idLong) != null) {
+                channel.guild.getVoiceChannelById(channel.idLong)!!.delete().reason("빈 개인 통화방").queue()
+            }
+        } catch (ignored: Throwable) {
+        }
+
+        try {
+            val textChannel = channel.guild.getTextChannelById(voiceChannel.textChannel)
+            textChannel?.delete()?.reason("빈 개인 채팅방")?.queue()
+        } catch (ignored: Throwable) {
+        }
 
         guildData.voiceChannels.remove(voiceChannel)
         guildDataStore.update(guildData)
