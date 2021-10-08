@@ -19,7 +19,6 @@ import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.hooks.EventListener
 import net.dv8tion.jda.api.utils.cache.CacheFlag
 import org.postgresql.ds.PGSimpleDataSource
-import org.slf4j.LoggerFactory
 import java.util.concurrent.TimeUnit
 import javax.sql.DataSource
 import net.dv8tion.jda.api.entities.Guild as JDAGuild
@@ -80,6 +79,18 @@ class Bot(private val config: BotConfig) {
             }
         )
         guildDataStore.update(guildData)
+    }
+
+    fun removeCreationChannel(guild: JDAGuild, jdaVoiceChannel: JDAVoiceChannel) {
+        val guildData = getGuildDataOrSave(guild)
+
+        val channel = guildData.creationChannels.find { it.id == jdaVoiceChannel.idLong }
+
+        if (channel != null) {
+            guildData.creationChannels.remove(channel)
+            guildDataStore.update(guildData)
+        }
+        deleteCreatedChannels(jdaVoiceChannel)
     }
 
     fun createChannels(guild: JDAGuild, owner: Member, category: Category?) {

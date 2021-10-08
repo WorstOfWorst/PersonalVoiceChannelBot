@@ -2,6 +2,7 @@ package com.github.wow.pvc
 
 import com.github.wow.pvc.util.Constants
 import net.dv8tion.jda.api.events.GenericEvent
+import net.dv8tion.jda.api.events.channel.voice.VoiceChannelDeleteEvent
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent
 import net.dv8tion.jda.api.events.guild.voice.GenericGuildVoiceUpdateEvent
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent
@@ -21,6 +22,7 @@ class EventListenerImpl(private val bot: Bot) : EventListener {
             is GuildJoinEvent -> onGuildJoin(event)
             is GuildVoiceJoinEvent -> onGuildVoiceJoin(event)
             is GuildVoiceLeaveEvent, is GuildVoiceMoveEvent -> onGuildVoiceUpdateEvent(event as GenericGuildVoiceUpdateEvent)
+            is VoiceChannelDeleteEvent -> onVoiceChannelDelete(event)
         }
     }
 
@@ -72,6 +74,15 @@ class EventListenerImpl(private val bot: Bot) : EventListener {
             if (guild.creationChannels.any { it.id == channel.idLong }) {
                 bot.createChannels(event.guild, event.member, channel.parent)
             }
+        }
+    }
+
+    private fun onVoiceChannelDelete(event: VoiceChannelDeleteEvent) {
+        val channel = event.channel
+        val guild = bot.getGuildDataOrSave(event.guild)
+
+        if (guild.creationChannels.any { it.id == channel.idLong }) {
+            bot.removeCreationChannel(event.guild, channel)
         }
     }
 }
