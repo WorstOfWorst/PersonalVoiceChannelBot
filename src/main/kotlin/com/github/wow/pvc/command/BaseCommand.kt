@@ -1,10 +1,10 @@
 package com.github.wow.pvc.command
 
 import com.github.wow.pvc.Bot
+import java.util.concurrent.TimeUnit
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.entities.Message
-import java.util.concurrent.TimeUnit
 
 abstract class BaseCommand(
     override val name: String,

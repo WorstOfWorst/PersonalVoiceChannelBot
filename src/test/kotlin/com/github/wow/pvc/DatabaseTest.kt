@@ -9,12 +9,12 @@ import io.requery.sql.KotlinConfiguration
 import io.requery.sql.KotlinEntityDataStore
 import io.requery.sql.SchemaModifier
 import io.requery.sql.TableCreationMode
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-import org.postgresql.ds.PGSimpleDataSource
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.postgresql.ds.PGSimpleDataSource
 
 class DatabaseTest {
 
@@ -63,15 +63,19 @@ class DatabaseTest {
             val entity = Guild().apply {
                 id = 1
                 val guild = this
-                voiceChannels.add(VoiceChannel().apply {
-                    id = 1
-                    textChannel = -1
-                    this.guild = guild
-                })
-                creationChannels.add(CreationChannel().apply {
-                    id = 1
-                    this.guild = guild
-                })
+                voiceChannels.add(
+                    VoiceChannel().apply {
+                        id = 1
+                        textChannel = -1
+                        this.guild = guild
+                    }
+                )
+                creationChannels.add(
+                    CreationChannel().apply {
+                        id = 1
+                        this.guild = guild
+                    }
+                )
             }
             insert(entity)
 
