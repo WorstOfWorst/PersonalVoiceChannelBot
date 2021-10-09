@@ -1,10 +1,10 @@
 package com.github.wow.pvc.command
 
 import com.github.wow.pvc.Bot
-import java.util.concurrent.TimeUnit
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.entities.Message
+import java.util.concurrent.TimeUnit
 
 abstract class BaseCommand(
     override val name: String,
@@ -29,10 +29,11 @@ abstract class BaseCommand(
                 Permission.VIEW_CHANNEL,
                 Permission.MANAGE_CHANNEL,
                 Permission.MESSAGE_MANAGE,
-                Permission.VOICE_MOVE_OTHERS
+                Permission.VOICE_MOVE_OTHERS,
+                Permission.MANAGE_ROLES
             )
         ) {
-            replyAndDelete(message, "이 명령어를 실행하기 위해서 봇에 `채널 보기`, `채널 관리`, `메시지 관리`, `멤버 이동` 권한이 필요해요.")
+            replyAndDelete(message, "이 명령어를 실행하기 위해서 봇에 `채널 보기`, `채널 관리`, `메시지 관리`, `멤버 이동`, `역헐 관리` 권한이 필요해요.")
             return false
         }
         if (message.member?.hasPermission(Permission.MANAGE_CHANNEL) == false) {

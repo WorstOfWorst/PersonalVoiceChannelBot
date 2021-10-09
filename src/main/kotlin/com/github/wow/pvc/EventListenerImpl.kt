@@ -60,6 +60,8 @@ class EventListenerImpl(private val bot: Bot) : EventListener {
 
         if (guild.creationChannels.any { it.id == channel.idLong }) {
             bot.createChannels(event.guild, event.member, channel.parent)
+        } else if (guild.voiceChannels.any { it.id == channel.idLong }) {
+            bot.applyJoin(event.member, channel)
         }
     }
 
@@ -72,6 +74,8 @@ class EventListenerImpl(private val bot: Bot) : EventListener {
                 logger.debug(channel.members.size.toString())
                 if (channel.members.size <= 0) {
                     bot.deleteCreatedChannels(channel)
+                } else {
+                    bot.applyQuit(event.member, channel)
                 }
             }
         }
@@ -79,6 +83,8 @@ class EventListenerImpl(private val bot: Bot) : EventListener {
             val channel = event.channelJoined!!
             if (guild.creationChannels.any { it.id == channel.idLong }) {
                 bot.createChannels(event.guild, event.member, channel.parent)
+            } else if (guild.voiceChannels.any { it.id == channel.idLong }) {
+                bot.applyJoin(event.member, channel)
             }
         }
     }

@@ -15,8 +15,6 @@ import io.requery.sql.KotlinConfiguration
 import io.requery.sql.KotlinEntityDataStore
 import io.requery.sql.SchemaModifier
 import io.requery.sql.TableCreationMode
-import java.util.concurrent.TimeUnit
-import javax.sql.DataSource
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.Permission
@@ -26,6 +24,8 @@ import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.hooks.EventListener
 import net.dv8tion.jda.api.utils.cache.CacheFlag
 import org.postgresql.ds.PGSimpleDataSource
+import java.util.concurrent.TimeUnit
+import javax.sql.DataSource
 import net.dv8tion.jda.api.entities.Guild as JDAGuild
 import net.dv8tion.jda.api.entities.VoiceChannel as JDAVoiceChannel
 
@@ -126,6 +126,28 @@ class Bot(private val config: BotConfig) {
                     }
                 }
         }
+    }
+
+    fun applyJoin(member: Member, channel: JDAVoiceChannel) {
+        val guildData = getGuildDataOrSave(channel.guild)
+        val voiceChannel = guildData.voiceChannels.find { it.id == channel.idLong } ?: return
+
+        val textChannel = channel.guild.getTextChannelById(voiceChannel.textChannel) ?: return
+
+        textChannel.upsertPermissionOverride(member)
+            .setAllow(listOf(Permission.VIEW_CHANNEL, Permission.MESSAGE_HISTORY)).setDeny(listOf())
+            .queue(null) {}
+    }
+
+    fun applyQuit(member: Member, channel: JDAVoiceChannel) {
+        val guildData = getGuildDataOrSave(channel.guild)
+        val voiceChannel = guildData.voiceChannels.find { it.id == channel.idLong } ?: return
+
+        val textChannel = channel.guild.getTextChannelById(voiceChannel.textChannel) ?: return
+
+        textChannel.upsertPermissionOverride(member).setAllow(listOf())
+            .setDeny(listOf(Permission.VIEW_CHANNEL, Permission.MESSAGE_HISTORY))
+            .queue(null) {}
     }
 
     fun deleteCreatedChannels(channel: JDAVoiceChannel) {
