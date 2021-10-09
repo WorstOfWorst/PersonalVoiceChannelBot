@@ -1,6 +1,9 @@
 package com.github.wow.pvc
 
+import ch.qos.logback.classic.Level
+import ch.qos.logback.classic.Logger
 import com.github.wow.pvc.util.Constants
+import com.github.wow.pvc.util.IS_DEVELOPMENT_BUILD
 import net.dv8tion.jda.api.events.GenericEvent
 import net.dv8tion.jda.api.events.channel.voice.VoiceChannelDeleteEvent
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent
@@ -15,6 +18,10 @@ import org.slf4j.LoggerFactory
 class EventListenerImpl(private val bot: Bot) : EventListener {
 
     private val logger = LoggerFactory.getLogger(javaClass)
+
+    init {
+        (logger as Logger).level = if (IS_DEVELOPMENT_BUILD) Level.DEBUG else Level.INFO
+    }
 
     override fun onEvent(event: GenericEvent) {
         when (event) {
