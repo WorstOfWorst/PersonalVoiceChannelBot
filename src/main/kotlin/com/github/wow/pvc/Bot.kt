@@ -96,6 +96,10 @@ class Bot(private val config: BotConfig) {
             )
             .setUserlimit(99)
 
+        if (category != null) {
+            channel.syncPermissionOverrides()
+        }
+
         channel.queue { voiceChannel ->
             guild.createTextChannel("${owner.effectiveName}의 채팅방", category)
                 .addMemberPermissionOverride(owner.idLong, listOf(Permission.MANAGE_CHANNEL), listOf())
