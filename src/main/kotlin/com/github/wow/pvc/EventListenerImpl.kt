@@ -94,7 +94,7 @@ class EventListenerImpl(private val bot: Bot) : EventListener {
             channel.members.forEach {
                 preventDeleteMap[it.idLong] = channel.idLong
             }
-            bot.removeCreationChannel(event.guild, channel)
+            bot.deleteCreatedChannels(channel)
         }
     }
 }

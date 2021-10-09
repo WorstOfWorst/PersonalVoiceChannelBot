@@ -19,8 +19,8 @@ abstract class BaseCommand(
 
     fun replyAndDelete(message: Message, content: String) {
         message.reply(content).queue {
-            it.delete().queueAfter(5, TimeUnit.SECONDS)
-            message.delete().queueAfter(5, TimeUnit.SECONDS)
+            it.delete().queueAfter(5, TimeUnit.SECONDS, null) {}
+            message.delete().queueAfter(5, TimeUnit.SECONDS, null) {}
         }
     }
 

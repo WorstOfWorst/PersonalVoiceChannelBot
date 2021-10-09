@@ -86,10 +86,6 @@ class Bot(private val config: BotConfig) {
         guildDataStore.update(guildData)
     }
 
-    fun removeCreationChannel(guild: JDAGuild, jdaVoiceChannel: JDAVoiceChannel) {
-        deleteCreatedChannels(jdaVoiceChannel)
-    }
-
     fun createChannels(guild: JDAGuild, owner: Member, category: Category?) {
         val channel = guild.createVoiceChannel("${owner.effectiveName}의 통화방", category)
             .addMemberPermissionOverride(owner.idLong, listOf(Permission.MANAGE_CHANNEL), listOf())
@@ -136,18 +132,10 @@ class Bot(private val config: BotConfig) {
         val guildData = getGuildDataOrSave(channel.guild)
         val voiceChannel = guildData.voiceChannels.find { it.id == channel.idLong } ?: return
 
-        try {
-            if (channel.guild.getVoiceChannelById(channel.idLong) != null) {
-                channel.guild.getVoiceChannelById(channel.idLong)!!.delete().reason("빈 개인 통화방").queue()
-            }
-        } catch (ignored: Throwable) {
-        }
+        channel.guild.getVoiceChannelById(channel.idLong)!!.delete().reason("빈 개인 통화방").queue(null) {}
 
-        try {
-            val textChannel = channel.guild.getTextChannelById(voiceChannel.textChannel)
-            textChannel?.delete()?.reason("빈 개인 채팅방")?.queue()
-        } catch (ignored: Throwable) {
-        }
+        val textChannel = channel.guild.getTextChannelById(voiceChannel.textChannel)
+        textChannel?.delete()?.reason("빈 개인 채팅방")?.queue(null) {}
 
         guildData.voiceChannels.remove(voiceChannel)
         guildDataStore.update(guildData)
@@ -158,8 +146,8 @@ class Bot(private val config: BotConfig) {
         commandMap[commandName]?.let { command ->
             if (command.testPermission(message) && !command.execute(message, args)) {
                 message.reply("사용법: ${command.usage}").queue {
-                    it.delete().queueAfter(5, TimeUnit.SECONDS)
-                    message.delete().queueAfter(5, TimeUnit.SECONDS)
+                    it.delete().queueAfter(5, TimeUnit.SECONDS, null) {}
+                    message.delete().queueAfter(5, TimeUnit.SECONDS, null) {}
                 }
             }
         }
