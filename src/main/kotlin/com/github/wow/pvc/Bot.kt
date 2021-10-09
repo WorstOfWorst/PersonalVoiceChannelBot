@@ -149,8 +149,8 @@ class Bot(private val config: BotConfig) {
 
         val textChannel = channel.guild.getTextChannelById(voiceChannel.textChannel) ?: return
 
-        textChannel.upsertPermissionOverride(member).setAllow(listOf())
-            .setDeny(listOf(Permission.VIEW_CHANNEL, Permission.MESSAGE_HISTORY))
+        textChannel.upsertPermissionOverride(member)
+            .reset()
             .queue(null) {}
     }
 
