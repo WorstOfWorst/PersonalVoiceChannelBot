@@ -103,7 +103,7 @@ class Bot(private val config: BotConfig) {
 
         channel.queue { voiceChannel ->
             guild.createTextChannel("${owner.effectiveName}의 채팅방", category)
-                .addMemberPermissionOverride(owner.idLong, listOf(Permission.MANAGE_CHANNEL), listOf())
+                .addMemberPermissionOverride(owner.idLong, listOf(Permission.MANAGE_CHANNEL, Permission.VIEW_CHANNEL), listOf())
                 .addMemberPermissionOverride(
                     guild.selfMember.idLong,
                     listOf(Permission.VIEW_CHANNEL, Permission.MANAGE_CHANNEL),
@@ -111,7 +111,6 @@ class Bot(private val config: BotConfig) {
                 )
                 .setNSFW(false)
                 .addPermissionOverride(guild.publicRole, listOf(), listOf(Permission.VIEW_CHANNEL))
-                .addMemberPermissionOverride(owner.idLong, listOf(Permission.VIEW_CHANNEL), listOf())
                 .queue { textChannel ->
                     guild.moveVoiceMember(owner, voiceChannel).queue()
 
