@@ -89,16 +89,17 @@ class Bot(private val config: BotConfig) {
     fun createChannels(guild: JDAGuild, owner: Member, category: Category?) {
         val channel = guild.createVoiceChannel("${owner.effectiveName}의 통화방", category)
             .addMemberPermissionOverride(owner.idLong, listOf(Permission.MANAGE_CHANNEL), listOf())
-            .addMemberPermissionOverride(
-                guild.selfMember.idLong,
-                listOf(Permission.VIEW_CHANNEL, Permission.MANAGE_CHANNEL),
-                listOf()
-            )
             .setUserlimit(99)
 
         if (category != null) {
             channel.syncPermissionOverrides()
         }
+        channel
+            .addMemberPermissionOverride(
+                guild.selfMember.idLong,
+                listOf(Permission.VIEW_CHANNEL, Permission.MANAGE_CHANNEL),
+                listOf()
+            )
 
         channel.queue { voiceChannel ->
             guild.createTextChannel("${owner.effectiveName}의 채팅방", category)
