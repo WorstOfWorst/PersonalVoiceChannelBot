@@ -1,6 +1,8 @@
 # PersonalVoiceChannelBot
 디스코드 개인 통화방 및 채팅방 생성 봇
 
+[Discord Invite](https://discord.com/api/oauth2/authorize?client_id=894770260727701504&permissions=285289488&scope=bot)
+
 # 제작자
 [황선우(hwangseonu)](https://github.com/hwangseonu), [앨빈(alvin0319)](https://github.com/alvin0319)
 
