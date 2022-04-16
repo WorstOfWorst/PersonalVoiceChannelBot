@@ -26,8 +26,8 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag
 import org.postgresql.ds.PGSimpleDataSource
 import java.util.concurrent.TimeUnit
 import javax.sql.DataSource
+import net.dv8tion.jda.api.entities.AudioChannel as JDAAudioChannel
 import net.dv8tion.jda.api.entities.Guild as JDAGuild
-import net.dv8tion.jda.api.entities.VoiceChannel as JDAVoiceChannel
 
 class Bot(private val config: BotConfig) {
     private val jda: JDA
@@ -136,7 +136,7 @@ class Bot(private val config: BotConfig) {
         }
     }
 
-    fun applyJoin(member: Member, channel: JDAVoiceChannel) {
+    fun applyJoin(member: Member, channel: JDAAudioChannel) {
         val guildData = getGuildDataOrSave(channel.guild)
         val voiceChannel = guildData.voiceChannels.find { it.id == channel.idLong } ?: return
 
@@ -147,7 +147,7 @@ class Bot(private val config: BotConfig) {
             .queue(null) {}
     }
 
-    fun applyQuit(member: Member, channel: JDAVoiceChannel) {
+    fun applyQuit(member: Member, channel: JDAAudioChannel) {
         val guildData = getGuildDataOrSave(channel.guild)
         val voiceChannel = guildData.voiceChannels.find { it.id == channel.idLong } ?: return
 
@@ -158,7 +158,7 @@ class Bot(private val config: BotConfig) {
             .queue(null) {}
     }
 
-    fun deleteCreatedChannels(channel: JDAVoiceChannel) {
+    fun deleteCreatedChannels(channel: JDAAudioChannel) {
         val guildData = getGuildDataOrSave(channel.guild)
         val voiceChannel = guildData.voiceChannels.find { it.id == channel.idLong } ?: return
 

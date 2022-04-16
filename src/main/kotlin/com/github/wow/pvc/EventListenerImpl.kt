@@ -4,8 +4,11 @@ import ch.qos.logback.classic.Level
 import ch.qos.logback.classic.Logger
 import com.github.wow.pvc.util.Constants
 import com.github.wow.pvc.util.IS_DEVELOPMENT_BUILD
+import net.dv8tion.jda.api.entities.AudioChannel
+import net.dv8tion.jda.api.entities.StageChannel
+import net.dv8tion.jda.api.entities.VoiceChannel
 import net.dv8tion.jda.api.events.GenericEvent
-import net.dv8tion.jda.api.events.channel.voice.VoiceChannelDeleteEvent
+import net.dv8tion.jda.api.events.channel.ChannelDeleteEvent
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent
 import net.dv8tion.jda.api.events.guild.voice.GenericGuildVoiceUpdateEvent
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent
@@ -29,7 +32,7 @@ class EventListenerImpl(private val bot: Bot) : EventListener {
             is GuildJoinEvent -> onGuildJoin(event)
             is GuildVoiceJoinEvent -> onGuildVoiceJoin(event)
             is GuildVoiceLeaveEvent, is GuildVoiceMoveEvent -> onGuildVoiceUpdateEvent(event as GenericGuildVoiceUpdateEvent)
-            is VoiceChannelDeleteEvent -> onVoiceChannelDelete(event)
+            is ChannelDeleteEvent -> onChannelDelete(event)
         }
     }
 
@@ -59,7 +62,11 @@ class EventListenerImpl(private val bot: Bot) : EventListener {
         val guild = bot.getGuildDataOrSave(event.guild)
 
         if (guild.creationChannels.any { it.id == channel.idLong }) {
-            bot.createChannels(event.guild, event.member, channel.parent)
+            if (channel is VoiceChannel) {
+                bot.createChannels(event.guild, event.member, channel.parentCategory)
+            } else if (channel is StageChannel) {
+                bot.createChannels(event.guild, event.member, channel.parentCategory)
+            }
         } else if (guild.voiceChannels.any { it.id == channel.idLong }) {
             bot.applyJoin(event.member, channel)
         }
@@ -82,15 +89,20 @@ class EventListenerImpl(private val bot: Bot) : EventListener {
         if (event.channelJoined != null) {
             val channel = event.channelJoined!!
             if (guild.creationChannels.any { it.id == channel.idLong }) {
-                bot.createChannels(event.guild, event.member, channel.parent)
+                if (channel is VoiceChannel) {
+                    bot.createChannels(event.guild, event.member, channel.parentCategory)
+                } else if (channel is StageChannel) {
+                    bot.createChannels(event.guild, event.member, channel.parentCategory)
+                }
             } else if (guild.voiceChannels.any { it.id == channel.idLong }) {
                 bot.applyJoin(event.member, channel)
             }
         }
     }
 
-    private fun onVoiceChannelDelete(event: VoiceChannelDeleteEvent) {
+    private fun onChannelDelete(event: ChannelDeleteEvent) {
         val channel = event.channel
+        if (!event.channelType.isAudio || channel !is AudioChannel) return
         val guild = bot.getGuildDataOrSave(event.guild)
 
         if (guild.creationChannels.any { it.id == channel.idLong }) {
