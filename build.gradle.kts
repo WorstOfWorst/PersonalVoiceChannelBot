@@ -1,6 +1,6 @@
 plugins {
-    kotlin("jvm") version "1.5.31"
-    kotlin("kapt") version "1.5.31"
+    kotlin("jvm") version "1.6.20"
+    kotlin("kapt") version "1.6.20"
     id("com.github.johnrengelman.shadow") version "7.0.0"
 }
 
@@ -14,7 +14,7 @@ repositories {
 }
 
 dependencies {
-    implementation("net.dv8tion:JDA:5.0.0-alpha.9")
+    implementation("net.dv8tion:JDA:5.0.0-alpha.11")
     implementation("io.requery:requery:1.6.1")
     kapt("io.requery:requery-processor:1.6.1")
     implementation("io.requery:requery-kotlin:1.6.0")
