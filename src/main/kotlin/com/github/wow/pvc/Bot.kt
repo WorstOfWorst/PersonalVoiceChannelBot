@@ -30,7 +30,7 @@ import net.dv8tion.jda.api.entities.AudioChannel as JDAAudioChannel
 import net.dv8tion.jda.api.entities.Guild as JDAGuild
 
 class Bot(private val config: BotConfig) {
-    private val jda: JDA
+    val jda: JDA
     private val listener: EventListener
     private val dataSource: DataSource
     private val requeryConfig: KotlinConfiguration
