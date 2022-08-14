@@ -105,7 +105,7 @@ class EventListenerImpl(private val bot: Bot) : EventListener {
         if (!event.channelType.isAudio || channel !is AudioChannel) return
         val guild = bot.getGuildDataOrSave(event.guild)
 
-        if (guild.creationChannels.any { it.id == channel.idLong }) {
+        if (guild.creationChannels.any { it.id == (channel as AudioChannel).idLong }) {
             bot.deleteCreatedChannels(channel)
         }
     }

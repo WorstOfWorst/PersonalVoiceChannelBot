@@ -65,7 +65,7 @@ class Bot(private val config: BotConfig) {
         jda.awaitReady()
 
         registerCommands(
-            PvcSetCommand(this),
+            PvcSetCommand(this)
         )
     }
 

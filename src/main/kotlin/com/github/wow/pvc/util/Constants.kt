@@ -12,7 +12,7 @@ object Constants {
         GatewayIntent.DIRECT_MESSAGE_TYPING,
         GatewayIntent.GUILD_VOICE_STATES,
         GatewayIntent.GUILD_MEMBERS,
-        GatewayIntent.GUILD_EMOJIS,
+        GatewayIntent.GUILD_EMOJIS_AND_STICKERS,
         GatewayIntent.GUILD_MESSAGES,
     )
     val activity = Activity.playing("!!방생성채널설정")
