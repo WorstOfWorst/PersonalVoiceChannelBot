@@ -18,16 +18,16 @@ import io.requery.sql.TableCreationMode
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.Permission
-import net.dv8tion.jda.api.entities.Category
 import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.entities.Message
+import net.dv8tion.jda.api.entities.channel.concrete.Category
 import net.dv8tion.jda.api.hooks.EventListener
 import net.dv8tion.jda.api.utils.cache.CacheFlag
 import org.postgresql.ds.PGSimpleDataSource
 import java.util.concurrent.TimeUnit
 import javax.sql.DataSource
-import net.dv8tion.jda.api.entities.AudioChannel as JDAAudioChannel
 import net.dv8tion.jda.api.entities.Guild as JDAGuild
+import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel as JDAAudioChannel
 
 class Bot(private val config: BotConfig) {
     val jda: JDA

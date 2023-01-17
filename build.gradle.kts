@@ -14,7 +14,7 @@ repositories {
 }
 
 dependencies {
-    implementation("net.dv8tion:JDA:5.0.0-alpha.16")
+    implementation("net.dv8tion:JDA:5.0.0-beta.3")
     implementation("io.requery:requery:1.6.1")
     kapt("io.requery:requery-processor:1.6.1")
     implementation("io.requery:requery-kotlin:1.6.0")
