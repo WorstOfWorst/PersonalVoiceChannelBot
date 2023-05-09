@@ -55,7 +55,7 @@ class Bot(private val config: BotConfig) {
         listener = EventListenerImpl(this)
 
         jda = JDABuilder.createDefault(config.token)
-            .setEnabledIntents(Constants.intents)
+            .enableIntents(Constants.intents)
             .setActivity(Constants.activity)
             .enableCache(CacheFlag.VOICE_STATE)
             .enableCache(CacheFlag.MEMBER_OVERRIDES)
